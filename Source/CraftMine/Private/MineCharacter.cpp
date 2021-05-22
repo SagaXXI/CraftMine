@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-//TODO fix the mouse rotation
+//TODO fix the mouse rotation che za huinuya
 //add a pickaxe
 //create the golden and copper ore
 //add digging mechanics
@@ -9,6 +9,7 @@
 
 #include "MineCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMineCharacter::AMineCharacter()
@@ -18,12 +19,17 @@ AMineCharacter::AMineCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->bUsePawnControlRotation = true;
 	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-	
-	
+	Camera->bUsePawnControlRotation = false;
 
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
@@ -53,20 +59,33 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMineCharacter::MoveRight(float Value)
 {
-	AddMovementInput(GetActorRightVector() * Value);
+	if(Controller != NULL && Value != NULL)
+	{
+		const FRotator Rotation = Controller->GetControlRotation(); 
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMineCharacter::LookUp(float AxisValue)
 {
-	AddControllerPitchInput(AxisValue * MouseSensitivity * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput(AxisValue * MouseSensitivity);
 }
 
 void AMineCharacter::LookRight(float AxisValue)
 {
-	AddControllerPitchInput(AxisValue * MouseSensitivity * GetWorld()->GetDeltaSeconds());
+	AddControllerYawInput(AxisValue * MouseSensitivity);
 }
 
 void AMineCharacter::MoveForward(float Value)
 {
-	AddMovementInput(GetActorForwardVector() * Value);
+	if(Controller != NULL && Value != NULL)
+	{
+		const FRotator Rotation = Controller->GetControlRotation(); 
+		const FRotator PitchRotation(Rotation.Pitch, 0, 0);
+		const FVector Direction = FRotationMatrix(PitchRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(Direction, Value);
+	}
+	
 }
