@@ -1,5 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+//TODO fix the mouse rotation
+//add a pickaxe
+//create the golden and copper ore
+//add digging mechanics
+//add gamemode with score
+//search for right models
 
 #include "MineCharacter.h"
 #include "Components/CapsuleComponent.h"
@@ -40,12 +46,24 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMineCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMineCharacter::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMineCharacter::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AMineCharacter::LookRight);
 
 }
 
 void AMineCharacter::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector() * Value);
+}
+
+void AMineCharacter::LookUp(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue * MouseSensitivity * GetWorld()->GetDeltaSeconds());
+}
+
+void AMineCharacter::LookRight(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue * MouseSensitivity * GetWorld()->GetDeltaSeconds());
 }
 
 void AMineCharacter::MoveForward(float Value)

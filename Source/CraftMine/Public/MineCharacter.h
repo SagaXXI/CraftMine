@@ -39,8 +39,15 @@ protected:
 
 	void MoveRight(float Value);
 
+	void LookUp(float AxisValue);
+
+	void LookRight(float AxisValue);
+
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 500.f;
+
+	UPROPERTY(EditAnywhere)
+	float MouseSensitivity = 10.f;
 	
 	
 	
