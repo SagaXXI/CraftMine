@@ -3,7 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
+
 #include "MineCharacter.generated.h"
 
 UCLASS()
@@ -15,15 +19,33 @@ public:
 	// Sets default values for this character's properties
 	AMineCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+	UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere)
+	USpringArmComponent* SpringArm;
+
+	void MoveForward(float Value);
+
+	void MoveRight(float Value);
+
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed = 500.f;
+	
+	
+	
+	
+
+	
 
 };
