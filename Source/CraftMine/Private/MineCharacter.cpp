@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-//TODO fix the mouse rotation che za huinuya
-//add a pickaxe
-//create the golden and copper ore
+//TODO create the golden and copper ore
 //add digging mechanics
 //add gamemode with score
 //search for right models
@@ -36,7 +34,11 @@ AMineCharacter::AMineCharacter()
 void AMineCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//Spawning a pickaxe
+	Pickaxe = GetWorld()->SpawnActor<APickaxe>(PickaxeToSpawn);
+	//Attaches pickaxe to choosen socket in skeletal mesh
+	Pickaxe->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickaxeSocket"));
+	Pickaxe->SetOwner(this);
 }
 
 // Called every frame
@@ -63,7 +65,7 @@ void AMineCharacter::MoveRight(float Value)
 	{
 		const FRotator Rotation = Controller->GetControlRotation(); 
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -83,9 +85,8 @@ void AMineCharacter::MoveForward(float Value)
 	if(Controller != NULL && Value != NULL)
 	{
 		const FRotator Rotation = Controller->GetControlRotation(); 
-		const FRotator PitchRotation(Rotation.Pitch, 0, 0);
-		const FVector Direction = FRotationMatrix(PitchRotation).GetUnitAxis(EAxis::Y);
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
 	}
-	
 }

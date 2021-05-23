@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 
+#include "Pickaxe.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
-
 #include "MineCharacter.generated.h"
+
+class APickaxe;
 
 UCLASS()
 class CRAFTMINE_API AMineCharacter : public ACharacter
@@ -29,16 +31,20 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	
+
+	//Movement stuff
+	void MoveForward(float Value);
+
+	void MoveRight(float Value);
+
+	//Mouse looking stuff
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm;
-
-	void MoveForward(float Value);
-
-	void MoveRight(float Value);
-
+	
 	void LookUp(float AxisValue);
 
 	void LookRight(float AxisValue);
@@ -48,6 +54,13 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float MouseSensitivity = 10.f;
+
+	//Pickaxe spawning stuff
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<APickaxe> PickaxeToSpawn;
+
+	APickaxe* Pickaxe;
+	
 	
 	
 	
