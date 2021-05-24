@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-//TODO create the golden and copper ore
-//add digging mechanics
+//TODO add digging mechanics
 //add gamemode with score
 //search for right models
 
 #include "MineCharacter.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Ore.h"
+
 
 // Sets default values
 AMineCharacter::AMineCharacter()
@@ -45,6 +46,7 @@ void AMineCharacter::BeginPlay()
 void AMineCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	CheckIfOre();
 
 }
 
@@ -78,6 +80,32 @@ void AMineCharacter::LookUp(float AxisValue)
 void AMineCharacter::LookRight(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * MouseSensitivity);
+}
+
+void AMineCharacter::CheckIfOre()
+{
+	FHitResult TraceResult;
+
+	FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation(); 
+	FVector End = (UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector() * TraceRange) + Start;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	if(GetWorld()->LineTraceSingleByChannel(TraceResult, Start, End, ECollisionChannel::ECC_WorldDynamic, Params))
+	{
+		AOre* Ore = Cast<AOre>(TraceResult.GetActor());
+		if(Ore)
+		{
+			CurrentOre = Ore;
+			UE_LOG(LogTemp, Warning, TEXT("%s found"), *Ore->GetName())
+			return;
+		}
+		else
+		{
+			CurrentOre = nullptr;
+			return;
+		}
+	}
 }
 
 void AMineCharacter::MoveForward(float Value)

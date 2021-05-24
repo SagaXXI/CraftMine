@@ -11,6 +11,7 @@
 #include "MineCharacter.generated.h"
 
 class APickaxe;
+class AOre;
 
 UCLASS()
 class CRAFTMINE_API AMineCharacter : public ACharacter
@@ -60,9 +61,14 @@ protected:
 	TSubclassOf<APickaxe> PickaxeToSpawn;
 
 	APickaxe* Pickaxe;
-	
-	
-	
+
+	//Checking if we are looking forward to an ore
+	void CheckIfOre();
+
+	UPROPERTY(EditAnywhere)
+	float TraceRange = 1000.f;
+
+	AOre* CurrentOre;
 	
 	
 
