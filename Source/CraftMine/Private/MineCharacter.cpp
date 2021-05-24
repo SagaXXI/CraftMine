@@ -1,13 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-//TODO add digging mechanics
-//add gamemode with score
+//TODO do check, that if we do not hold the key before the end of digging, the progress of digging will be lost
+//add digging mechanics
+//add gamemode with score, when collecting a golden ore
 //search for right models
 
 #include "MineCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Ore.h"
+#include "TimerManager.h"
+#include "MyPlayerController.h"
 
 
 // Sets default values
@@ -46,7 +49,6 @@ void AMineCharacter::BeginPlay()
 void AMineCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CheckIfOre();
 
 }
 
@@ -58,6 +60,8 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMineCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMineCharacter::LookUp);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AMineCharacter::LookRight);
+	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Pressed, this, &AMineCharacter::OnDigging);
+	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Released, this, &AMineCharacter::StopDigging);
 
 }
 
@@ -71,6 +75,18 @@ void AMineCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+void AMineCharacter::MoveForward(float Value)
+{
+	if(Controller != NULL && Value != NULL)
+	{
+		const FRotator Rotation = Controller->GetControlRotation(); 
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Value);
+	}
+}
+
 
 void AMineCharacter::LookUp(float AxisValue)
 {
@@ -108,13 +124,27 @@ void AMineCharacter::CheckIfOre()
 	}
 }
 
-void AMineCharacter::MoveForward(float Value)
+void AMineCharacter::OnDigging()
 {
-	if(Controller != NULL && Value != NULL)
+	PlayDigAnimation();
+	CheckIfOre();
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if(CurrentOre && PlayerController->IsInputKeyDown(EKeys::LeftMouseButton))
 	{
-		const FRotator Rotation = Controller->GetControlRotation(); 
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
+		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, false);
 	}
 }
+
+void AMineCharacter::Dig()
+{
+	CurrentOre->Destroy();
+}
+
+void AMineCharacter::StopDigging()
+{
+}
+
+void AMineCharacter::PlayDigAnimation()
+{
+}
+

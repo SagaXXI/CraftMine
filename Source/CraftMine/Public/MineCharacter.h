@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "MineCharacter.generated.h"
 
+
 class APickaxe;
 class AOre;
 
@@ -32,13 +33,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	
-
+	/////////////////////////
 	//Movement stuff
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
 
+	
+	/////////////////////////
 	//Mouse looking stuff
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
@@ -56,6 +58,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float MouseSensitivity = 10.f;
 
+	
+	/////////////////////////
 	//Pickaxe spawning stuff
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<APickaxe> PickaxeToSpawn;
@@ -68,8 +72,33 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float TraceRange = 1000.f;
 
+
+	/////////////////////////
+	//Digging mechanics
+
+	//The function that will be firing Dig() function, animation, and digging delay
+	void OnDigging();
+
+	//The actual digging function, that will destroy the ore, and collect it
+	void Dig();
+
+	//Stops playing digging animation
+	void StopDigging();
+
+	void PlayDigAnimation();
+
+	//Current ore that we are looking now
 	AOre* CurrentOre;
 	
+	//Delay used for digging
+	UPROPERTY(EditAnywhere)
+	float DiggingDelay = 5.f;
+	
+	//Time, in which we were digging
+	FTimerHandle DiggingTimer;
+
+	//For animation
+	bool bIsDiggingNow;
 	
 
 	
