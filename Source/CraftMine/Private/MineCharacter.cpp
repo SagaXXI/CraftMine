@@ -1,6 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+//Add impulse to character. Impulses are accumulated each tick and applied together so multiple calls to this function will accumulate.
+//An impulse is an instantaneous force, usually applied once. If you want to continually apply forces each frame, use AddForce().
+//Note that changing the momentum of characters like this can change the movement mode.
 
-//TODO do check, that if we do not hold the key before the end of digging, the progress of digging will be lost
+
+
+//TODO check why damaging is not working
+//do check, that if we do not hold the key before the end of digging, the progress of digging will be lost
+//create a destructible mesh and change destruct it, when you are digging (in Dig() function change the currentore material)
 //add digging mechanics
 //add gamemode with score, when collecting a golden ore
 //search for right models
@@ -69,7 +76,7 @@ void AMineCharacter::MoveRight(float Value)
 {
 	if(Controller != NULL && Value != NULL)
 	{
-		const FRotator Rotation = Controller->GetControlRotation(); 
+     		const FRotator Rotation = Controller->GetControlRotation(); 
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
@@ -128,16 +135,19 @@ void AMineCharacter::OnDigging()
 {
 	PlayDigAnimation();
 	CheckIfOre();
-	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if(CurrentOre && PlayerController->IsInputKeyDown(EKeys::LeftMouseButton))
+	if(CurrentOre)
 	{
+		
+		bIsDiggingNow = true;
 		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, false);
 	}
 }
 
 void AMineCharacter::Dig()
 {
-	CurrentOre->Destroy();
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	UGameplayStatics::ApplyDamage(CurrentOre, 2.f, PlayerController, this, DamageType);
+	bIsDiggingNow = false;
 }
 
 void AMineCharacter::StopDigging()

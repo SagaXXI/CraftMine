@@ -29,6 +29,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//For animation
+	bool bIsDiggingNow = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -97,8 +99,10 @@ protected:
 	//Time, in which we were digging
 	FTimerHandle DiggingTimer;
 
-	//For animation
-	bool bIsDiggingNow;
+	UPROPERTY(EditDefaultsOnly, Category=Damage)
+	TSubclassOf<UDamageType> DamageType;
+
+	
 	
 
 	
