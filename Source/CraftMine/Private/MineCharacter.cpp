@@ -57,6 +57,7 @@ void AMineCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
 }
 
 // Called to bind functionality to input
@@ -76,7 +77,7 @@ void AMineCharacter::MoveRight(float Value)
 {
 	if(Controller != NULL && Value != NULL)
 	{
-     		const FRotator Rotation = Controller->GetControlRotation(); 
+     	const FRotator Rotation = Controller->GetControlRotation(); 
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
@@ -137,21 +138,23 @@ void AMineCharacter::OnDigging()
 	CheckIfOre();
 	if(CurrentOre)
 	{
-		
 		bIsDiggingNow = true;
-		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, false);
+		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, true);
 	}
 }
 
 void AMineCharacter::Dig()
 {
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	UGameplayStatics::ApplyDamage(CurrentOre, 2.f, PlayerController, this, DamageType);
-	bIsDiggingNow = false;
+	UGameplayStatics::ApplyDamage(CurrentOre, 5.f, PlayerController, this, DamageType);
+
 }
 
 void AMineCharacter::StopDigging()
 {
+	GetWorld()->GetTimerManager().ClearTimer(DiggingTimer);
+	bIsDiggingNow = false;
+
 }
 
 void AMineCharacter::PlayDigAnimation()

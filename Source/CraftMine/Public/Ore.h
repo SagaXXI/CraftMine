@@ -57,5 +57,6 @@ protected:
 	float DamageByHit = 1.f;
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")
-	float DefaultImpulse = 1.f;	
+	float ImpulseForce = 100.f;
+	
 };

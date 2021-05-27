@@ -16,8 +16,9 @@ AOre::AOre()
 	
 	Mesh = CreateDefaultSubobject<UDestructibleComponent>(TEXT("Destructible Mesh"));
 	//Same thing as notify component hit events
-	Mesh->SetNotifyRigidBodyCollision(true);
+	//Mesh->SetNotifyRigidBodyCollision(true);
 	Mesh->SetupAttachment(RootComponent);
+	
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Comp"));
 	CollisionBox->SetupAttachment(RootComponent);
@@ -47,10 +48,11 @@ void AOre::Damage(AActor* DamagedActor, float Damage,
 	if(!Player) return;
 	if(!bIsDestroyed && Player->bIsDiggingNow)
 	{
-		CurrentHealth -= DamageByHit;
-		if(CurrentHealth <= 0.f)
+		Mesh->AddImpulse(Mesh->GetForwardVector() * ImpulseForce * Mesh->GetMass(), NAME_None);
+		CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.f, MaxHealth);
+		if(CurrentHealth == 0.f)
 		{
-			//DestroyActor(DamageByHit, Hit.Location, NormalImpulse, DefaultImpulse);
+			DestroyActor(CurrentHealth, GetActorLocation(),Mesh->GetForwardVector() , ImpulseForce);
 		}
 	}
 	
@@ -67,7 +69,7 @@ void AOre::DestroyActor(float DamageAmount, FVector HitLocation, FVector Impulse
 	if(!bIsDestroyed)
 	{
 		bIsDestroyed = true;
-		Mesh->ApplyDamage(DamageAmount, HitLocation, ImpulseDirection, Impulse);
+		Mesh->ApplyDamage(CurrentHealth, HitLocation, ImpulseDirection, Impulse);
 	}
 }
 

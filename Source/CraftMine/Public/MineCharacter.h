@@ -94,7 +94,7 @@ protected:
 	
 	//Delay used for digging
 	UPROPERTY(EditAnywhere)
-	float DiggingDelay = 5.f;
+	float DiggingDelay = 1.f;
 	
 	//Time, in which we were digging
 	FTimerHandle DiggingTimer;
