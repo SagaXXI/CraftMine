@@ -13,6 +13,7 @@
 
 class APickaxe;
 class AOre;
+class AMyPlayerController;
 
 UCLASS()
 class CRAFTMINE_API AMineCharacter : public ACharacter
@@ -22,9 +23,6 @@ class CRAFTMINE_API AMineCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMineCharacter();
-
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -63,7 +61,7 @@ protected:
 	
 	/////////////////////////
 	//Pickaxe spawning stuff
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Digging")
 	TSubclassOf<APickaxe> PickaxeToSpawn;
 
 	APickaxe* Pickaxe;
@@ -71,7 +69,7 @@ protected:
 	//Checking if we are looking forward to an ore
 	void CheckIfOre();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Digging")
 	float TraceRange = 1000.f;
 
 
@@ -93,14 +91,19 @@ protected:
 	AOre* CurrentOre;
 	
 	//Delay used for digging
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Digging")
 	float DiggingDelay = 1.f;
 	
 	//Time, in which we were digging
 	FTimerHandle DiggingTimer;
 
-	UPROPERTY(EditDefaultsOnly, Category=Damage)
+	UPROPERTY(EditDefaultsOnly, Category = Damage)
 	TSubclassOf<UDamageType> DamageType;
+
+	AMyPlayerController* PlayerController;
+
+	UPROPERTY(EditAnywhere, Category = "Digging")
+	float DiggingDamage = 2.f;
 
 	
 	

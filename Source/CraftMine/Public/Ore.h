@@ -21,9 +21,6 @@ public:
 	// Sets default values for this actor's properties
 	AOre();
 	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,12 +34,8 @@ protected:
 	UFUNCTION()
 	void Damage(AActor* DamagedActor, float Damage,
 	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
-
-	UFUNCTION()
-	void Trigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-
-	void DestroyActor(float DamageAmount, FVector HitLocation, FVector ImpulseDirection, float Impulse);
+	
+	void DestroyActor(float BaseDamage, const FVector& HurtOrigin, float DamageRad, float ImpulseStrength, bool bFullDamage);
 
 	bool bIsDestroyed = false;
 
@@ -57,6 +50,10 @@ protected:
 	float DamageByHit = 1.f;
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")
-	float ImpulseForce = 100.f;
+	float ImpulseForce = 1000.f;
+	
+	UPROPERTY(EditAnywhere, Category = "Destructible")
+	float DamageRadius = 50.f;
+	
 	
 };

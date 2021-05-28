@@ -11,6 +11,7 @@
 //add digging mechanics
 //add gamemode with score, when collecting a golden ore
 //search for right models
+//make the ore destruction clear and nice, by ticking the details and change some parameters
 
 #include "MineCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -23,8 +24,6 @@
 // Sets default values
 AMineCharacter::AMineCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -50,15 +49,9 @@ void AMineCharacter::BeginPlay()
 	//Attaches pickaxe to choosen socket in skeletal mesh
 	Pickaxe->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickaxeSocket"));
 	Pickaxe->SetOwner(this);
+	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }
 
-// Called every frame
-void AMineCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-
-}
 
 // Called to bind functionality to input
 void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -134,20 +127,18 @@ void AMineCharacter::CheckIfOre()
 
 void AMineCharacter::OnDigging()
 {
-	PlayDigAnimation();
+	//PlayDigAnimation();
 	CheckIfOre();
 	if(CurrentOre)
 	{
 		bIsDiggingNow = true;
-		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, true);
+		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, true, 0.f);
 	}
 }
 
 void AMineCharacter::Dig()
 {
-	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	UGameplayStatics::ApplyDamage(CurrentOre, 5.f, PlayerController, this, DamageType);
-
+	UGameplayStatics::ApplyDamage(CurrentOre, DiggingDamage, PlayerController, this, DamageType);
 }
 
 void AMineCharacter::StopDigging()
