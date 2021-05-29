@@ -5,8 +5,8 @@
 
 
 
-//TODO check why damaging is not working
-//do check, that if we do not hold the key before the end of digging, the progress of digging will be lost
+//TODO CHECK THE ENHANCED INPUT TUTORIAL
+//Remake the digging mechanics, so when we overlap something, then we can dig it
 //create a destructible mesh and change destruct it, when you are digging (in Dig() function change the currentore material)
 //add digging mechanics
 //add gamemode with score, when collecting a golden ore

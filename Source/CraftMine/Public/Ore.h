@@ -54,6 +54,8 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Destructible")
 	float DamageRadius = 50.f;
-	
+
+	UPROPERTY(EditAnywhere, Category = "Destructible")
+	float BPDestroyTime = 7.f;
 	
 };

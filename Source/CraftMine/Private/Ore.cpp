@@ -51,6 +51,7 @@ void AOre::Damage(AActor* DamagedActor, float Damage,
 			//Do here things, like picking the gold up in your inventory 
 			UE_LOG(LogTemp, Warning, TEXT("Vse"))
 			DestroyActor(MaxHealth * 100, GetActorLocation(), DamageRadius * 10, ImpulseForce, true);
+			SetLifeSpan(BPDestroyTime);
 		}
 	}
 	
