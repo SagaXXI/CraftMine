@@ -11,6 +11,7 @@
 
 class UBoxComponent;
 class UDestructibleComponent;
+//class UDamageType;
 
 UCLASS()
 class CRAFTMINE_API AOre : public AActor
@@ -20,8 +21,10 @@ class CRAFTMINE_API AOre : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AOre();
-
+	
 	bool GetIsDestroyed();
+	
+	void Heal(float HP, AController* PlayerController, AActor* HealMaker);
 	
 protected:
 	// Called when the game starts or when spawned
@@ -38,7 +41,7 @@ protected:
 	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	
 	void DestroyActor(float BaseDamage, const FVector& HurtOrigin, float DamageRad, float ImpulseStrength, bool bFullDamage);
-
+	
 	bool bIsDestroyed = false;
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")
@@ -46,20 +49,11 @@ protected:
 
 	float CurrentHealth;
 
-
-	/*UPROPERTY(EditAnywhere, Category = "Destructible")
-	float MeshMaxHealth = 10.f;
-	
-	float MeshHealth;*/
-	
-	UPROPERTY(EditAnywhere, Category = "Destructible")
-	float DamageByHit = 1.f;
-
 	UPROPERTY(EditAnywhere, Category = "Destructible")
 	float ImpulseForce = 1000.f;
 	
 	UPROPERTY(EditAnywhere, Category = "Destructible")
-	float DamageRadius = 50.f;
+	float DamageExplosionRadius = 50.f;
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")
 	float BPDestroyTime = 7.f;

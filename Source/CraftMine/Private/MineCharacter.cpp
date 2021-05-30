@@ -23,7 +23,7 @@
 // Sets default values
 AMineCharacter::AMineCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->bUsePawnControlRotation = true;
@@ -51,14 +51,10 @@ void AMineCharacter::BeginPlay()
 	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }
 
-void AMineCharacter::Tick(float DeltaSeconds)
+/*void AMineCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	/*if(!PlayerController->IsInputKeyDown(FKey(TEXT("LeftMouseButton"))) && GetWorld()->GetTimerManager().IsTimerActive(DiggingTimer))
-	{
-		StopDigging();
-	}*/
-}
+}*/
 
 // Called to bind functionality to input
 void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -155,8 +151,7 @@ void AMineCharacter::StopDigging()
 	{
 		if(!CurrentOre->GetIsDestroyed())
 		{
-			UGameplayStatics::ApplyDamage(CurrentOre, -1000.f, PlayerController, this, DamageType);	
+			CurrentOre->Heal(1000.f, PlayerController, this);
 		}
 	}
-	
 }

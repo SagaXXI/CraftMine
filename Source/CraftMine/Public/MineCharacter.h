@@ -28,7 +28,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	virtual void Tick(float DeltaSeconds) override;
+	//virtual void Tick(float DeltaSeconds) override;
 
 	//For animation
 	bool bIsDiggingNow = false;
@@ -108,7 +108,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Digging")
 	float DiggingDamage = 2.f;
 
-	bool bIsDigKeyDown;
 
 	
 

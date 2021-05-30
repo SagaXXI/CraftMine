@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "DestructibleComponent.h"
 #include "MineCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AOre::AOre()
@@ -15,8 +16,6 @@ AOre::AOre()
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	
 	Mesh = CreateDefaultSubobject<UDestructibleComponent>(TEXT("Destructible Mesh"));
-	//Same thing as notify component hit events
-	//Mesh->SetNotifyRigidBodyCollision(true);
 	Mesh->SetupAttachment(RootComponent);
 	
 
@@ -48,13 +47,15 @@ void AOre::Damage(AActor* DamagedActor, float Damage,
 		{
 			UE_LOG(LogTemp, Error, TEXT("jdfjd"))
 		}
-		Mesh->ApplyRadiusDamage(Damage, GetActorLocation(), DamageRadius, ImpulseForce, true);
+		
+		FVector ImpulseDir = Mesh->GetForwardVector();
+		Mesh->ApplyDamage(Damage, GetActorLocation(), ImpulseDir,ImpulseForce);
 		CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.f, MaxHealth);
 		if(CurrentHealth == 0.f)
 		{
 			//Do here things, like picking the gold up in your inventory 
 			UE_LOG(LogTemp, Warning, TEXT("Vse"))
-			DestroyActor(MaxHealth * 100, GetActorLocation(), DamageRadius * 10, ImpulseForce, true);
+			DestroyActor(MaxHealth * 100, GetActorLocation(), DamageExplosionRadius * 10, ImpulseForce, true);
 			SetLifeSpan(BPDestroyTime);
 		}
 	}
@@ -67,8 +68,14 @@ void AOre::DestroyActor(float BaseDamage, const FVector& HurtOrigin, float Damag
 	if(!bIsDestroyed)
 	{
 		bIsDestroyed = true;
-		Mesh->ApplyRadiusDamage(BaseDamage, HurtOrigin, DamageRadius, ImpulseStrength, bFullDamage);
+		Mesh->ApplyRadiusDamage(BaseDamage, HurtOrigin, DamageExplosionRadius, ImpulseStrength, bFullDamage);
 	}
+}
+
+void AOre::Heal(float HP, AController* PlayerController, AActor* HealMaker)
+{
+    CurrentHealth = FMath::Clamp(CurrentHealth + HP, CurrentHealth, MaxHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Healed with %f points"), CurrentHealth)
 }
 
 bool AOre::GetIsDestroyed()
