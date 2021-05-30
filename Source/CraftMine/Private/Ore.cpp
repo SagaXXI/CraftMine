@@ -44,6 +44,10 @@ void AOre::Damage(AActor* DamagedActor, float Damage,
 	if(!Player) return;
 	if(!bIsDestroyed && Player->bIsDiggingNow)
 	{
+		if(Damage > 0.f)
+		{
+			UE_LOG(LogTemp, Error, TEXT("jdfjd"))
+		}
 		Mesh->ApplyRadiusDamage(Damage, GetActorLocation(), DamageRadius, ImpulseForce, true);
 		CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.f, MaxHealth);
 		if(CurrentHealth == 0.f)
@@ -66,4 +70,11 @@ void AOre::DestroyActor(float BaseDamage, const FVector& HurtOrigin, float Damag
 		Mesh->ApplyRadiusDamage(BaseDamage, HurtOrigin, DamageRadius, ImpulseStrength, bFullDamage);
 	}
 }
+
+bool AOre::GetIsDestroyed()
+{
+	return bIsDestroyed;
+}
+
+
 

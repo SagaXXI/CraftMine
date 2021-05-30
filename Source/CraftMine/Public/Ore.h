@@ -20,6 +20,8 @@ class CRAFTMINE_API AOre : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AOre();
+
+	bool GetIsDestroyed();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -39,12 +41,16 @@ protected:
 
 	bool bIsDestroyed = false;
 
-	bool bIsTriggerEnabled = false;
-
 	UPROPERTY(EditAnywhere, Category = "Destructible")
 	float MaxHealth = 10.f;
 
 	float CurrentHealth;
+
+
+	/*UPROPERTY(EditAnywhere, Category = "Destructible")
+	float MeshMaxHealth = 10.f;
+	
+	float MeshHealth;*/
 	
 	UPROPERTY(EditAnywhere, Category = "Destructible")
 	float DamageByHit = 1.f;

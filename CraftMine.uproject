@@ -21,10 +21,6 @@
 		{
 			"Name": "ApexDestruction",
 			"Enabled": true
-		},
-		{
-			"Name": "EnhancedInput",
-			"Enabled": true
 		}
 	]
 }

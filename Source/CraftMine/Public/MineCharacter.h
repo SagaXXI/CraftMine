@@ -11,6 +11,7 @@
 #include "MineCharacter.generated.h"
 
 
+
 class APickaxe;
 class AOre;
 class AMyPlayerController;
@@ -26,6 +27,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	virtual void Tick(float DeltaSeconds) override;
 
 	//For animation
 	bool bIsDiggingNow = false;
@@ -77,10 +80,10 @@ protected:
 	//Digging mechanics
 
 	//The function that will be firing Dig() function, animation, and digging delay
-	void OnDigging();
+	void OnDigging ();
 
 	//The actual digging function, that will destroy the ore, and collect it
-	void Dig();
+	void HoldDig();
 
 	//Stops playing digging animation
 	void StopDigging();
@@ -104,6 +107,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Digging")
 	float DiggingDamage = 2.f;
+
+	bool bIsDigKeyDown;
+
+	
+
 
 	
 	

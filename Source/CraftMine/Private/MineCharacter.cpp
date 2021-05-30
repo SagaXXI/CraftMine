@@ -5,26 +5,25 @@
 
 
 
-//TODO CHECK THE ENHANCED INPUT TUTORIAL
-//Remake the digging mechanics, so when we overlap something, then we can dig it
-//create a destructible mesh and change destruct it, when you are digging (in Dig() function change the currentore material)
-//add digging mechanics
+//TODO create a heal function in Ore class, then call it, when you need to heal it
 //add gamemode with score, when collecting a golden ore
 //search for right models
 //make the ore destruction clear and nice, by ticking the details and change some parameters
+//create a destructible mesh and change destruct it, when you are digging (in Dig() function change the currentore material
+//Add a map
 
 #include "MineCharacter.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "MyPlayerController.h"
 #include "Ore.h"
 #include "TimerManager.h"
-#include "MyPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
 AMineCharacter::AMineCharacter()
 {
-
+	PrimaryActorTick.bCanEverTick = true;
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->bUsePawnControlRotation = true;
@@ -52,6 +51,14 @@ void AMineCharacter::BeginPlay()
 	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }
 
+void AMineCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	/*if(!PlayerController->IsInputKeyDown(FKey(TEXT("LeftMouseButton"))) && GetWorld()->GetTimerManager().IsTimerActive(DiggingTimer))
+	{
+		StopDigging();
+	}*/
+}
 
 // Called to bind functionality to input
 void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -115,12 +122,10 @@ void AMineCharacter::CheckIfOre()
 		{
 			CurrentOre = Ore;
 			UE_LOG(LogTemp, Warning, TEXT("%s found"), *Ore->GetName())
-			return;
 		}
 		else
 		{
 			CurrentOre = nullptr;
-			return;
 		}
 	}
 }
@@ -132,12 +137,13 @@ void AMineCharacter::OnDigging()
 	if(CurrentOre)
 	{
 		bIsDiggingNow = true;
-		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::Dig, DiggingDelay, true, 0.f);
+		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::HoldDig, DiggingDelay, true, 0.f);
 	}
 }
 
-void AMineCharacter::Dig()
+void AMineCharacter::HoldDig()
 {
+	
 	UGameplayStatics::ApplyDamage(CurrentOre, DiggingDamage, PlayerController, this, DamageType);
 }
 
@@ -145,10 +151,12 @@ void AMineCharacter::StopDigging()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DiggingTimer);
 	bIsDiggingNow = false;
-
+	if(CurrentOre)
+	{
+		if(!CurrentOre->GetIsDestroyed())
+		{
+			UGameplayStatics::ApplyDamage(CurrentOre, -1000.f, PlayerController, this, DamageType);	
+		}
+	}
+	
 }
-
-void AMineCharacter::PlayDigAnimation()
-{
-}
-
