@@ -19,9 +19,9 @@ void ABasicGameMode::BeginPlay()
    
 }
 
-void ABasicGameMode::DestroyedActor(AOre* DestroyedActor, AMineCharacter* Destroyer)
+void ABasicGameMode::DestroyedActor(AOre* DestroyedActor, AActor* Destroyer)
 {
-    if(DestroyedActor == PlayerCharacter->GetCurrentOre() && Destroyer == PlayerCharacter)
+    if(DestroyedActor == PlayerCharacter->GetCurrentOre() && Cast<AMineCharacter>(Destroyer) == PlayerCharacter)
     {
         if(GS)
         {

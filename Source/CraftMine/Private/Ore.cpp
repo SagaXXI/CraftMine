@@ -6,6 +6,7 @@
 #include "DestructibleComponent.h"
 #include "MineCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "BasicGameMode.h"
 
 // Sets default values
 AOre::AOre()
@@ -32,6 +33,8 @@ void AOre::BeginPlay()
 	this->OnTakeAnyDamage.AddDynamic(this, &AOre::Damage);
 
 	CurrentHealth = MaxHealth;
+
+	GameMode = Cast<ABasicGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	
 }
 
@@ -56,6 +59,7 @@ void AOre::Damage(AActor* DamagedActor, float Damage,
 			//Do here things, like picking the gold up in your inventory 
 			UE_LOG(LogTemp, Warning, TEXT("Vse"))
 			DestroyActor(MaxHealth * 100, GetActorLocation(), DamageExplosionRadius * 10, ImpulseForce, true);
+			GameMode->DestroyedActor(this, DamageCauser);
 			SetLifeSpan(BPDestroyTime);
 		}
 	}

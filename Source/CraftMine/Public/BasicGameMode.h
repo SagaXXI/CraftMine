@@ -22,7 +22,7 @@ class CRAFTMINE_API ABasicGameMode : public AGameModeBase
 
 public:
 	
-	void DestroyedActor(AOre* DestroyedActor, AMineCharacter* Destroyer);
+	void DestroyedActor(AOre* DestroyedActor, AActor* Destroyer);
 
 	UFUNCTION(BlueprintImplementableEvent)	
 	void GameStart();

@@ -3,15 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include <stdbool.h>
-
 #include "GameFramework/Actor.h"
 #include "Ore.generated.h"
 
 class UBoxComponent;
 class UDestructibleComponent;
-//class UDamageType;
+class ABasicGameMode;
 
 UCLASS()
 class CRAFTMINE_API AOre : public AActor
@@ -57,5 +54,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")
 	float BPDestroyTime = 7.f;
+
+	ABasicGameMode* GameMode;
 	
 };
