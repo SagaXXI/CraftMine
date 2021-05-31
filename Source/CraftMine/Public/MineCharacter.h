@@ -32,6 +32,8 @@ public:
 
 	//For animation
 	bool bIsDiggingNow = false;
+
+	AOre* GetCurrentOre();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

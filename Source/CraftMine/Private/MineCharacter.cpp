@@ -5,12 +5,14 @@
 
 
 
-//TODO create a heal function in Ore class, then call it, when you need to heal it
-//add gamemode with score, when collecting a golden ore
+//TODO add gamemode with score, when collecting a golden ore
 //search for right models
 //make the ore destruction clear and nice, by ticking the details and change some parameters
 //create a destructible mesh and change destruct it, when you are digging (in Dig() function change the currentore material
 //Add a map
+//Add digging animation, effects, sound
+//Add UI to digging, and crosshair
+//Make a camera, that will be above us, and we will be looking to game above
 
 #include "MineCharacter.h"
 #include "MyPlayerController.h"
@@ -154,4 +156,9 @@ void AMineCharacter::StopDigging()
 			CurrentOre->Heal(1000.f, PlayerController, this);
 		}
 	}
+}
+
+AOre* AMineCharacter::GetCurrentOre()
+{
+	return CurrentOre;
 }

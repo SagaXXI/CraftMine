@@ -13,5 +13,8 @@ UCLASS()
 class CRAFTMINE_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	void SetPlayerEnableState(bool State);
 	
 };
