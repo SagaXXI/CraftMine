@@ -10,10 +10,10 @@ int32 ABasicGameState::GetScore()
 
 void ABasicGameState::IncrementScore()
 {
-	Score += IncrementAmount;
+	Score = FMath::Clamp(Score + IncrementAmount, Score, MaxScore);
 }
 
 void ABasicGameState::DecrementScore()
 {
-	Score -= DecrementAmount;
+	Score = FMath::Clamp(Score - DecrementAmount, 0, Score);
 }

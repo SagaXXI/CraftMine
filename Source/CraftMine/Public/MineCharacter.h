@@ -31,8 +31,14 @@ public:
 	//virtual void Tick(float DeltaSeconds) override;
 
 	//For animation
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bIsDiggingNow = false;
 
+	//for widgets in blueprints
+	UFUNCTION(BlueprintCallable)
+	float GetOreCurrentHealth();
+
+	//For basicgamemode class in c++
 	AOre* GetCurrentOre();
 protected:
 	// Called when the game starts or when spawned
@@ -107,7 +113,7 @@ protected:
 
 	AMyPlayerController* PlayerController;
 
-	UPROPERTY(EditAnywhere, Category = "Digging")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Digging")
 	float DiggingDamage = 2.f;
 
 

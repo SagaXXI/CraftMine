@@ -5,14 +5,11 @@
 
 
 
-//TODO add gamemode with score, when collecting a golden ore
+//TODO //Make a camera, that will be above us, and we will be looking to game above
 //search for right models
-//make the ore destruction clear and nice, by ticking the details and change some parameters
-//create a destructible mesh and change destruct it, when you are digging (in Dig() function change the currentore material
 //Add a map
 //Add digging animation, effects, sound
-//Add UI to digging, and crosshair
-//Make a camera, that will be above us, and we will be looking to game above
+
 
 #include "MineCharacter.h"
 #include "MyPlayerController.h"
@@ -158,7 +155,16 @@ void AMineCharacter::StopDigging()
 	}
 }
 
+float AMineCharacter::GetOreCurrentHealth()
+{
+	return CurrentOre->GetCurrentHealth();
+}
+
 AOre* AMineCharacter::GetCurrentOre()
 {
 	return CurrentOre;
 }
+
+/*void AMineCharacter::PlayDigAnimation()
+{
+}*/

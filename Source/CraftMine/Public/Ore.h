@@ -22,6 +22,8 @@ public:
 	bool GetIsDestroyed();
 	
 	void Heal(float HP, AController* PlayerController, AActor* HealMaker);
+
+	float GetCurrentHealth();
 	
 protected:
 	// Called when the game starts or when spawned

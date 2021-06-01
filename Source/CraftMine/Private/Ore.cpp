@@ -82,6 +82,12 @@ void AOre::Heal(float HP, AController* PlayerController, AActor* HealMaker)
 	UE_LOG(LogTemp, Warning, TEXT("Healed with %f points"), CurrentHealth)
 }
 
+float AOre::GetCurrentHealth()
+{
+	return CurrentHealth;
+}
+
+
 bool AOre::GetIsDestroyed()
 {
 	return bIsDestroyed;

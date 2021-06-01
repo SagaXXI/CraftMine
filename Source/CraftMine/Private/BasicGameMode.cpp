@@ -15,7 +15,7 @@ void ABasicGameMode::BeginPlay()
     PlayerControllerRef = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
     GS = GetGameState<ABasicGameState>();
     ScoreDecrement = FTimerDelegate::CreateUObject(GS, &ABasicGameState::DecrementScore);
-   // HandleGameStart();
+    HandleGameStart();
    
 }
 
@@ -30,9 +30,9 @@ void ABasicGameMode::DestroyedActor(AOre* DestroyedActor, AActor* Destroyer)
             UE_LOG(LogTemp, Warning, TEXT("Score : %i"), GS->GetScore())
             if(GS->GetScore() == GS->MaxScore)
             {
-              //PlayerWon();
+   
               PlayerControllerRef->SetPlayerEnableState(false);
-              //HandleGameOver(true);
+              HandleGameOver(true);
             }
         }
     }
@@ -59,19 +59,6 @@ void ABasicGameMode::HandleGameOver(bool PlayerWon)
     GameOver(PlayerWon);
 }
 
-/*void ABasicGameMode::PlayerWon()
-{
-    PlayerControllerRef->SetPlayerEnableState(false);
-    //Add some widgets
-}
-
-void ABasicGameMode::PlayerLost()
-{
-    PlayerControllerRef->SetPlayerEnableState(false);
-    //Add some widgets
-    
-}
-*/
 void ABasicGameMode::StartDecrementing()
 {
     GetWorldTimerManager().SetTimer(Decrementing, ScoreDecrement, DecrementDelay, true);
@@ -79,7 +66,7 @@ void ABasicGameMode::StartDecrementing()
     {
         GetWorldTimerManager().ClearTimer(Decrementing);
         PlayerControllerRef->SetPlayerEnableState(false);
-        //HandleGameOver(false);
+        HandleGameOver(false);
     }
     
 }

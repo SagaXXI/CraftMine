@@ -38,10 +38,6 @@ protected:
 
 	void HandleGameOver(bool PlayerWon);
 
-	void PlayerWon();
-
-	void PlayerLost();
-
 	void StartDecrementing();
 
 	FTimerHandle Decrementing;
