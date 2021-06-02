@@ -5,14 +5,14 @@
 
 void AMyPlayerController::SetPlayerEnableState(bool State)
 {
+	AMyPlayerController::bShowMouseCursor = false;
 	if(State)
 	{
 		GetPawnOrSpectator()->EnableInput(this);
-		AMyPlayerController::bShowMouseCursor = true;
+		
 	}
 	else
 	{
 		GetPawnOrSpectator()->DisableInput(this);
-		AMyPlayerController::bShowMouseCursor = false;
 	}
 }

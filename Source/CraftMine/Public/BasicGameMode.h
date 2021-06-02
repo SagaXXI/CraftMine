@@ -33,7 +33,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	private:
+private:
 	void HandleGameStart();
 
 	void HandleGameOver(bool PlayerWon);
@@ -58,5 +58,7 @@ protected:
 	AMineCharacter* PlayerCharacter;
 
 	ABasicGameState* GS;
+
+	bool bStartDecrementing = false;
 };
 

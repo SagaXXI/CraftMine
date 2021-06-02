@@ -59,9 +59,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm;
 	
-	void LookUp(float AxisValue);
+	/*void LookUp(float AxisValue);
 
-	void LookRight(float AxisValue);
+	void LookRight(float AxisValue);*/
+	
+	void RotateTurret(FVector LookAtTarget);
 
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 500.f;

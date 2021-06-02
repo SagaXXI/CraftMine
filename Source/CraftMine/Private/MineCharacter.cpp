@@ -5,7 +5,7 @@
 
 
 
-//TODO //Make a camera, that will be above us, and we will be looking to game above
+//TODO Make a camera, that will be above us, and we will be looking to game above
 //search for right models
 //Add a map
 //Add digging animation, effects, sound
@@ -17,12 +17,13 @@
 #include "TimerManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
 AMineCharacter::AMineCharacter()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->bUsePawnControlRotation = true;
@@ -50,10 +51,10 @@ void AMineCharacter::BeginPlay()
 	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }
 
-/*void AMineCharacter::Tick(float DeltaSeconds)
+void AMineCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-}*/
+}
 
 // Called to bind functionality to input
 void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -61,8 +62,8 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMineCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMineCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMineCharacter::LookUp);
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AMineCharacter::LookRight);
+	/*PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMineCharacter::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AMineCharacter::LookRight);*/
 	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Pressed, this, &AMineCharacter::OnDigging);
 	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Released, this, &AMineCharacter::StopDigging);
 
@@ -70,28 +71,15 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMineCharacter::MoveRight(float Value)
 {
-	if(Controller != NULL && Value != NULL)
-	{
-     	const FRotator Rotation = Controller->GetControlRotation(); 
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Direction, Value);
-	}
+	AddMovementInput(GetActorRightVector() * Value);
 }
 
 void AMineCharacter::MoveForward(float Value)
 {
-	if(Controller != NULL && Value != NULL)
-	{
-		const FRotator Rotation = Controller->GetControlRotation(); 
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-	}
+	AddMovementInput(GetActorForwardVector() * Value);
 }
 
-
-void AMineCharacter::LookUp(float AxisValue)
+/*void AMineCharacter::LookUp(float AxisValue)
 {
 	AddControllerPitchInput(AxisValue * MouseSensitivity);
 }
@@ -99,7 +87,7 @@ void AMineCharacter::LookUp(float AxisValue)
 void AMineCharacter::LookRight(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * MouseSensitivity);
-}
+}*/
 
 void AMineCharacter::CheckIfOre()
 {
@@ -168,3 +156,14 @@ AOre* AMineCharacter::GetCurrentOre()
 /*void AMineCharacter::PlayDigAnimation()
 {
 }*/
+
+//Will rotate the turret, to where we look, like in World of Tanks
+void AMineCharacter::RotateTurret(FVector LookAtTarget)
+{
+	FVector StartLocation = GetMesh()->GetComponentLocation();
+	
+	//Find a rotation for an object at Start location to point at Target location.
+	FRotator MeshRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, FVector(LookAtTarget.X, LookAtTarget.Y, GetMesh()->GetComponentLocation().Z));
+
+	GetMesh()->SetWorldRotation(MeshRotation);
+}

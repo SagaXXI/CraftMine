@@ -61,9 +61,11 @@ void ABasicGameMode::HandleGameOver(bool PlayerWon)
 
 void ABasicGameMode::StartDecrementing()
 {
+    bStartDecrementing = true;
     GetWorldTimerManager().SetTimer(Decrementing, ScoreDecrement, DecrementDelay, true);
     if(GS->GetScore() <= 0)
     {
+        bStartDecrementing = false;
         GetWorldTimerManager().ClearTimer(Decrementing);
         PlayerControllerRef->SetPlayerEnableState(false);
         HandleGameOver(false);
