@@ -5,8 +5,7 @@
 
 
 
-//TODO fix HUD bug and create displaying a score
-//pass that linetracecheck under cursor  into CheckIfOre func and do it, only when ovelapping with the ore
+//TODO check why decrementing is not working and add camera lag (maybe)
 //search for right models
 //Add a map
 //Add digging animation, effects, sound
@@ -112,7 +111,7 @@ void AMineCharacter::OnDigging()
 {
 	//PlayDigAnimation();
 	CheckIfOre();
-	if(CurrentOre)
+	if(CurrentOre && CurrentOre->IsPlayerOverlapped())
 	{
 		bIsDiggingNow = true;
 		GetWorld()->GetTimerManager().SetTimer(DiggingTimer,this, &AMineCharacter::HoldDig, DiggingDelay, true, 0.f);

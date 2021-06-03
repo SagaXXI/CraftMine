@@ -24,6 +24,12 @@ public:
 	void Heal(float HP, AController* PlayerController, AActor* HealMaker);
 
 	float GetCurrentHealth();
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
+
+	virtual void NotifyActorEndOverlap(AActor* OtherActor);
+
+	bool IsPlayerOverlapped();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -40,7 +46,8 @@ protected:
 	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	
 	void DestroyActor(float BaseDamage, const FVector& HurtOrigin, float DamageRad, float ImpulseStrength, bool bFullDamage);
-	
+
+private:
 	bool bIsDestroyed = false;
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")
@@ -58,5 +65,7 @@ protected:
 	float BPDestroyTime = 7.f;
 
 	ABasicGameMode* GameMode;
+
+	bool bPlayerOverlapped = false;
 	
 };

@@ -14,13 +14,14 @@ class CRAFTMINE_API ABasicGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 public:
+	UFUNCTION(BlueprintPure = true)
 	int32 GetScore();
 
 	void IncrementScore();
 
 	void DecrementScore();
 
-	UPROPERTY(EditAnywhere, Category = "Score")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Score")
 	int32 MaxScore = 100;
 
 private:

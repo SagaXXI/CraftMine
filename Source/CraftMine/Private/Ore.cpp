@@ -87,6 +87,23 @@ float AOre::GetCurrentHealth()
 	return CurrentHealth;
 }
 
+void AOre::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	bPlayerOverlapped = true;
+}
+
+void AOre::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+	bPlayerOverlapped = false;
+}
+
+bool AOre::IsPlayerOverlapped()
+{
+	return bPlayerOverlapped;
+}
+
 
 bool AOre::GetIsDestroyed()
 {
