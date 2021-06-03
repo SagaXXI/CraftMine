@@ -28,7 +28,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	//virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	//For animation
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -43,7 +43,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Digging")
+	float DiggingDamage = 2.f;
+private:
 	/////////////////////////
 	//Movement stuff
 	void MoveForward(float Value);
@@ -63,7 +66,9 @@ protected:
 
 	void LookRight(float AxisValue);*/
 	
-	void RotateTurret(FVector LookAtTarget);
+	void RotateMesh(FVector LookAtTarget);
+
+	FHitResult TraceHitResult;
 
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 500.f;
@@ -115,8 +120,6 @@ protected:
 
 	AMyPlayerController* PlayerController;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Digging")
-	float DiggingDamage = 2.f;
 
 
 	

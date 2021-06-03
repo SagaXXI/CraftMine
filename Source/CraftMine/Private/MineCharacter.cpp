@@ -5,7 +5,9 @@
 
 
 
-//TODO Make a camera, that will be above us, and we will be looking to game above
+//TODO fix animation bug
+//fix HUD bug and create displaying a score
+//pass that linetracecheck under cursor  into CheckIfOre func and do it, only when ovelapping with the ore
 //search for right models
 //Add a map
 //Add digging animation, effects, sound
@@ -32,9 +34,9 @@ AMineCharacter::AMineCharacter()
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
 
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
+	bUseControllerRotationPitch = true;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationRoll = true;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
@@ -54,6 +56,39 @@ void AMineCharacter::BeginPlay()
 void AMineCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	//GetHitUnderCursor() will rotate the turret, according to your cursor, like in Tanki Online. 
+	//Detailly, it will just trace to place, under your cursor
+	if(PlayerController)
+	{
+		/*PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
+		FVector HitLocation = TraceHitResult.Location;
+		
+		//This will finally rotate the turret, according to the location of trace, which is under your cursor
+		RotateMesh(HitLocation);FHitResult TraceResult;*/
+
+		//PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
+		
+
+		if(PlayerController->GetHitResultUnderCursor(ECC_WorldDynamic, true, TraceHitResult))
+		{
+			AOre* Ore = Cast<AOre>(TraceHitResult.GetActor());
+			if(Ore)
+			{
+				CurrentOre = Ore;
+				UE_LOG(LogTemp, Warning, TEXT("%s found"), *Ore->GetName())
+			}
+			else
+			{
+				CurrentOre = nullptr;
+			}
+		}
+		FVector HitLocation = TraceHitResult.Location;
+		
+		//This will finally rotate the turret, according to the location of trace, which is under your cursor
+		RotateMesh(HitLocation);
+	}
+	
 }
 
 // Called to bind functionality to input
@@ -116,7 +151,7 @@ void AMineCharacter::CheckIfOre()
 void AMineCharacter::OnDigging()
 {
 	//PlayDigAnimation();
-	CheckIfOre();
+	//CheckIfOre();
 	if(CurrentOre)
 	{
 		bIsDiggingNow = true;
@@ -158,12 +193,13 @@ AOre* AMineCharacter::GetCurrentOre()
 }*/
 
 //Will rotate the turret, to where we look, like in World of Tanks
-void AMineCharacter::RotateTurret(FVector LookAtTarget)
+void AMineCharacter::RotateMesh(FVector LookAtTarget)
 {
-	FVector StartLocation = GetMesh()->GetComponentLocation();
+	FVector StartLocation = GetActorLocation();
 	
 	//Find a rotation for an object at Start location to point at Target location.
-	FRotator MeshRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, FVector(LookAtTarget.X, LookAtTarget.Y, GetMesh()->GetComponentLocation().Z));
+	FRotator MeshRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, FVector(LookAtTarget.X, LookAtTarget.Y, GetActorLocation().Z));
+	SetActorRotation(MeshRotation);
 
-	GetMesh()->SetWorldRotation(MeshRotation);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *MeshRotation.ToString())
 }
