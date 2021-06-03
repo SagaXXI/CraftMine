@@ -5,8 +5,7 @@
 
 
 
-//TODO fix animation bug
-//fix HUD bug and create displaying a score
+//TODO fix HUD bug and create displaying a score
 //pass that linetracecheck under cursor  into CheckIfOre func and do it, only when ovelapping with the ore
 //search for right models
 //Add a map
@@ -28,7 +27,7 @@ AMineCharacter::AMineCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->bUsePawnControlRotation = false;
 	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
@@ -61,28 +60,7 @@ void AMineCharacter::Tick(float DeltaSeconds)
 	//Detailly, it will just trace to place, under your cursor
 	if(PlayerController)
 	{
-		/*PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
-		FVector HitLocation = TraceHitResult.Location;
-		
-		//This will finally rotate the turret, according to the location of trace, which is under your cursor
-		RotateMesh(HitLocation);FHitResult TraceResult;*/
-
-		//PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
-		
-
-		if(PlayerController->GetHitResultUnderCursor(ECC_WorldDynamic, true, TraceHitResult))
-		{
-			AOre* Ore = Cast<AOre>(TraceHitResult.GetActor());
-			if(Ore)
-			{
-				CurrentOre = Ore;
-				UE_LOG(LogTemp, Warning, TEXT("%s found"), *Ore->GetName())
-			}
-			else
-			{
-				CurrentOre = nullptr;
-			}
-		}
+		PlayerController->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
 		FVector HitLocation = TraceHitResult.Location;
 		
 		//This will finally rotate the turret, according to the location of trace, which is under your cursor
@@ -96,33 +74,15 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMineCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMineCharacter::MoveRight);
-	/*PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMineCharacter::LookUp);
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AMineCharacter::LookRight);*/
 	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Pressed, this, &AMineCharacter::OnDigging);
 	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Released, this, &AMineCharacter::StopDigging);
 
-}
-
-void AMineCharacter::MoveRight(float Value)
-{
-	AddMovementInput(GetActorRightVector() * Value);
 }
 
 void AMineCharacter::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector() * Value);
 }
-
-/*void AMineCharacter::LookUp(float AxisValue)
-{
-	AddControllerPitchInput(AxisValue * MouseSensitivity);
-}
-
-void AMineCharacter::LookRight(float AxisValue)
-{
-	AddControllerYawInput(AxisValue * MouseSensitivity);
-}*/
 
 void AMineCharacter::CheckIfOre()
 {
@@ -133,7 +93,7 @@ void AMineCharacter::CheckIfOre()
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
-	if(GetWorld()->LineTraceSingleByChannel(TraceResult, Start, End, ECollisionChannel::ECC_WorldDynamic, Params))
+	if(GetWorld()->LineTraceSingleByChannel(TraceResult, TraceHitResult.TraceStart, TraceHitResult.TraceEnd, ECollisionChannel::ECC_WorldDynamic, Params))
 	{
 		AOre* Ore = Cast<AOre>(TraceResult.GetActor());
 		if(Ore)
@@ -151,7 +111,7 @@ void AMineCharacter::CheckIfOre()
 void AMineCharacter::OnDigging()
 {
 	//PlayDigAnimation();
-	//CheckIfOre();
+	CheckIfOre();
 	if(CurrentOre)
 	{
 		bIsDiggingNow = true;
@@ -187,10 +147,6 @@ AOre* AMineCharacter::GetCurrentOre()
 {
 	return CurrentOre;
 }
-
-/*void AMineCharacter::PlayDigAnimation()
-{
-}*/
 
 //Will rotate the turret, to where we look, like in World of Tanks
 void AMineCharacter::RotateMesh(FVector LookAtTarget)

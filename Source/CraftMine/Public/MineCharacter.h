@@ -51,9 +51,6 @@ private:
 	//Movement stuff
 	void MoveForward(float Value);
 
-	void MoveRight(float Value);
-
-	
 	/////////////////////////
 	//Mouse looking stuff
 	UPROPERTY(EditAnywhere)
@@ -62,21 +59,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm;
 	
-	/*void LookUp(float AxisValue);
-
-	void LookRight(float AxisValue);*/
-	
 	void RotateMesh(FVector LookAtTarget);
 
 	FHitResult TraceHitResult;
 
-	UPROPERTY(EditAnywhere)
-	float MovementSpeed = 500.f;
-
-	UPROPERTY(EditAnywhere)
-	float MouseSensitivity = 10.f;
-
-	
 	/////////////////////////
 	//Pickaxe spawning stuff
 	UPROPERTY(EditAnywhere, Category = "Digging")
@@ -90,7 +76,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Digging")
 	float TraceRange = 1000.f;
 
-
 	/////////////////////////
 	//Digging mechanics
 
@@ -102,8 +87,6 @@ private:
 
 	//Stops playing digging animation
 	void StopDigging();
-
-	void PlayDigAnimation();
 
 	//Current ore that we are looking now
 	AOre* CurrentOre;
@@ -119,6 +102,7 @@ private:
 	TSubclassOf<UDamageType> DamageType;
 
 	AMyPlayerController* PlayerController;
+
 
 
 
