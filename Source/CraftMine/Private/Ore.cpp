@@ -87,6 +87,11 @@ float AOre::GetCurrentHealth()
 	return CurrentHealth;
 }
 
+float AOre::GetMaxHealth()
+{
+	return MaxHealth;
+}
+
 void AOre::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);

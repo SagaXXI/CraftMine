@@ -24,6 +24,8 @@ public:
 	void Heal(float HP, AController* PlayerController, AActor* HealMaker);
 
 	float GetCurrentHealth();
+	
+	float GetMaxHealth();
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
 
@@ -52,9 +54,7 @@ protected:
 
 private:
 	bool bIsDestroyed = false;
-
-
-
+	
 	float CurrentHealth;
 
 	UPROPERTY(EditAnywhere, Category = "Destructible")

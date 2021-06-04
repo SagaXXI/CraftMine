@@ -153,6 +153,11 @@ float AMineCharacter::GetOreCurrentHealth()
 	return CurrentOre->GetCurrentHealth();
 }
 
+float AMineCharacter::GetOreMaxHealth()
+{
+	return CurrentOre->GetMaxHealth();
+}
+
 AOre* AMineCharacter::GetCurrentOre()
 {
 	return CurrentOre;

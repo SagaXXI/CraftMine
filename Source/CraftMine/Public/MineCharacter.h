@@ -38,14 +38,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetOreCurrentHealth();
 
+	UFUNCTION(BlueprintCallable)
+	float GetOreMaxHealth();
+
 	//For basicgamemode class in c++
 	AOre* GetCurrentOre();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Digging")
 	float DiggingDamage = 2.f;
+	
 private:
 	/////////////////////////
 	//Movement stuff
@@ -86,7 +91,7 @@ private:
 	//Digging mechanics
 
 	//The function that will be firing Dig() function, animation, and digging delay
-	void OnDigging ();
+	void OnDigging();
 
 	//The actual digging function, that will destroy the ore, and collect it
 	void HoldDig();
