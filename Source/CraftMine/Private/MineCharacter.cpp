@@ -156,5 +156,4 @@ void AMineCharacter::RotateMesh(FVector LookAtTarget)
 	FRotator MeshRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, FVector(LookAtTarget.X, LookAtTarget.Y, GetActorLocation().Z));
 	SetActorRotation(MeshRotation);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *MeshRotation.ToString())
 }

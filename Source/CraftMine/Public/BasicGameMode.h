@@ -45,7 +45,7 @@ private:
 	FTimerDelegate ScoreDecrement;
 
 	UPROPERTY(EditAnywhere, Category = "Score")
-	float DecrementDelay;
+	float DecrementDelay = 1.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Loop", meta = (AllowPrivateAccess = "true"))
 	int StartDelay = 3;

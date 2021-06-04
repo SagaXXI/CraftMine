@@ -28,6 +28,10 @@ void ABasicGameMode::DestroyedActor(AOre* DestroyedActor, AActor* Destroyer)
             UE_LOG(LogTemp, Warning, TEXT("Score : %i"), GS->GetScore())
             GS->IncrementScore();
             UE_LOG(LogTemp, Warning, TEXT("Score : %i"), GS->GetScore())
+            if(!bStartDecrementing)
+            {
+                StartDecrementing();
+            }
             if(GS->GetScore() == GS->MaxScore)
             {
    
@@ -62,7 +66,9 @@ void ABasicGameMode::HandleGameOver(bool PlayerWon)
 void ABasicGameMode::StartDecrementing()
 {
     bStartDecrementing = true;
+    UE_LOG(LogTemp, Warning, TEXT("%i"), GS->GetScore());
     GetWorldTimerManager().SetTimer(Decrementing, ScoreDecrement, DecrementDelay, true);
+    UE_LOG(LogTemp, Warning, TEXT("%i"), GS->GetScore());
     if(GS->GetScore() <= 0)
     {
         bStartDecrementing = false;

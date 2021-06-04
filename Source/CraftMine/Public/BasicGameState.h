@@ -34,5 +34,4 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Score")
 	int32 DecrementAmount = 1;
 	
-	
 };
