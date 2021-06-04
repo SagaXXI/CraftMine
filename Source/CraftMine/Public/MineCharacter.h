@@ -51,6 +51,12 @@ private:
 	//Movement stuff
 	void MoveForward(float Value);
 
+	void Running();
+
+	void StopRunning();
+
+	float RunningSpeed = 1200.f;
+
 	/////////////////////////
 	//Mouse looking stuff
 	UPROPERTY(EditAnywhere)

@@ -5,9 +5,9 @@
 
 
 
-//TODO check why decrementing is not working and add camera lag (maybe)
+//TODO Add a map
+//Check for a HUD, displaying digging progress
 //search for right models
-//Add a map
 //Add digging animation, effects, sound
 
 
@@ -75,12 +75,23 @@ void AMineCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMineCharacter::MoveForward);
 	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Pressed, this, &AMineCharacter::OnDigging);
 	PlayerInputComponent->BindAction(TEXT("Dig"), IE_Released, this, &AMineCharacter::StopDigging);
-
+	PlayerInputComponent->BindAction(TEXT("Running"), IE_Pressed, this, &AMineCharacter::Running);
+	PlayerInputComponent->BindAction(TEXT("Running"), IE_Released, this, &AMineCharacter::StopRunning);
 }
 
 void AMineCharacter::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector() * Value);
+}
+
+void AMineCharacter::Running()
+{
+	GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+}
+
+void AMineCharacter::StopRunning()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }
 
 void AMineCharacter::CheckIfOre()

@@ -46,12 +46,14 @@ protected:
 	const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	
 	void DestroyActor(float BaseDamage, const FVector& HurtOrigin, float DamageRad, float ImpulseStrength, bool bFullDamage);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Destructible")
+	float MaxHealth = 10.f;
 
 private:
 	bool bIsDestroyed = false;
 
-	UPROPERTY(EditAnywhere, Category = "Destructible")
-	float MaxHealth = 10.f;
+
 
 	float CurrentHealth;
 
