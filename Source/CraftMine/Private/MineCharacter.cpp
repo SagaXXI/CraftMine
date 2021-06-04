@@ -5,9 +5,7 @@
 
 
 
-//TODO Add a map
-//Check for a HUD, displaying digging progress
-//search for right models
+//TODO search for right models
 //Add digging animation, effects, sound
 
 

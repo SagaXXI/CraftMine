@@ -6,6 +6,7 @@
 
 #include "Pickaxe.h"
 #include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "MineCharacter.generated.h"
@@ -61,7 +62,7 @@ private:
 	void StopRunning();
 
 	float RunningSpeed = 1200.f;
-
+	
 	/////////////////////////
 	//Mouse looking stuff
 	UPROPERTY(EditAnywhere)
@@ -69,6 +70,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm;
+
 	
 	void RotateMesh(FVector LookAtTarget);
 

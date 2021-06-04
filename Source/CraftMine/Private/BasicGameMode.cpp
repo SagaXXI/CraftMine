@@ -53,7 +53,7 @@ void ABasicGameMode::HandleGameStart()
         //This one is another way, of how to set timers in ue4. By this we can store the function, that we want to call.
         //This is helpful, when the function is outside of this class (It is in TanksPlayerController)
         FTimerDelegate PlayerEnableDelegate = FTimerDelegate::CreateUObject(PlayerControllerRef, &AMyPlayerController::SetPlayerEnableState, true);
-        int32 Delay = StartDelay + 2;
+        int32 Delay = StartDelay + 7;
         GetWorldTimerManager().SetTimer(PlayerEnableHandle, PlayerEnableDelegate, Delay, false);
     }
 }
